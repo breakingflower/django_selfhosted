@@ -18,12 +18,15 @@
 </head>
 
 <body>    
-    {% include "eggstra/navbar.html" %}
-
-    <div class="text-center">
+    <div class="container-fluid text-center">
+        <!-- NAVBAR -->
+        {% include "eggstra/navbar.html" %}
+        <!-- FLASH MESSAGES -->
+        {% include "eggstra/messages.html" %}
+        <!-- CONTENT -->
         {% block content %}
         {% endblock content %}
-    </div> 
+    </div>
 </body>
 
 </html>

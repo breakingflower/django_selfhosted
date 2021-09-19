@@ -1,0 +1,14 @@
+{% if messages %}
+    {% for message in messages %}
+        <!-- Error message is danger in bootstrap -->
+        {% if message.tags == 'error' %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            {{ message }}
+        </div>
+        {% else %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+            {{ message }}
+        </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}

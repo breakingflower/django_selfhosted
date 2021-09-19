@@ -1,0 +1,14 @@
+{% extends "eggstra/base.html" %}
+{% block content %}
+
+<form action="/eggstra/profile/" method="post">
+  {% csrf_token %}
+  {{ userform.as_p }}
+  {{ profileform.as_p }}
+  <button class="btn btn-primary" type="submit">Update</button> 
+  <a href="{% url 'password_change' %}" class="btn btn-primary">Password Change</a> 
+  <!-- <a href="{% url 'eggstra:user_delete' %}" class="btn btn-primary">Delete account</a> -->
+
+</form>
+
+{% endblock content %}

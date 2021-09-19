@@ -1,0 +1,15 @@
+{% extends "eggstra/base.html" %}
+{% block content %}
+<form method="post">
+
+  {% csrf_token %}
+
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary">Log In</button>  <a href="{% url 'password_reset' %}" class="btn btn-primary">Forgot password</a>
+</form>
+<br>
+<div>
+  
+</div> 
+
+{% endblock content %}

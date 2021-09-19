@@ -1,25 +1,38 @@
 {% extends "eggstra/base.html" %}
 {% block content %}
 
-{% for eggs_available in eggs_available_collection %}
-<div class="card text-center">
-    <div class="card-header">
-        User: {{ eggs_available.created_by }}
-    </div>
-    <div class="card-body">
-        <h5 class="card-title">{{ eggs_available.created_on }}</h5>
-        <p class="card-text">Beschikbaar: {{ eggs_available.amount }}</p>
-        <p class="card-text">{{ eggs_available.notes }}</p>
-        <p class="card-text">Location: {{ eggs_available.created_by.userprofile.location }}</p>
-        
-        <a href="{% url 'eggstra:pickup' eggs_available.id %}" class="btn btn-primary">Pickup</a>
-        <a href="{% url 'eggstra:remove' eggs_available.id %}" class="btn btn-primary">Delete</a>
-    </div>
-    <div class="card-footer text-muted">
-        {{ eggs_available.time_from_gather_date }}
-    </div>
-</div>
-<br>
-{% endfor %}
+Egg Counter: {{ total_eggs }}
 
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Gebruiker</th>
+            <th scope="col">Datum</th>
+            <th scope="col">Hoeveelheid</th>
+            <th scope="col">Locatie</th>
+            <th scope="col">Extra info</th>
+            <th scope="col">Ophalen</th>
+            {% if user.is_authenticated %}
+            <th scope="col">Aanpassen</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for eggpost in eggposts %}
+        <tr>
+            <th scope="row">{{ eggpost.user }}</th>
+            <td>{{ eggpost.date|date:'d-m-Y' }} ({{ eggpost.age }})</td>
+            <td>{{ eggpost.amount }}</td>
+            <td>{{ eggpost.user.profile.location }}</td>
+            <td>{{ eggpost.notes }}</td>
+            <td><a href="{% url 'eggstra:pickup' eggpost.id %}" class="btn btn-primary">Ophalen</a></td>
+            {% if user == eggpost.user %}
+            <td><a href="{% url 'eggstra:update' eggpost.id %}" class="btn btn-primary">Aanpassen</a>
+                <a href="{% url 'eggstra:delete' eggpost.id %}" class="btn btn-primary">Verwijderen</a>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock content %}

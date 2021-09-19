@@ -1,6 +1,9 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-from .models import EggsAvailable, User, UserProfile
+from .models import EggPost, Profile
+from django.contrib.auth.models import User
+
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -9,23 +12,30 @@ class UserForm(forms.ModelForm):
 
 class ProfileForm(forms.ModelForm):
     class Meta:
-        model = UserProfile
+        model = Profile
         fields = ('location',)
 
-# from django import forms
-# from django.contrib.auth.forms import UserCreationForm
-
-# class SignUpForm(UserCreationForm):
-#     location = forms.CharField(max_length=30)
-
-#     class Meta:
-#         model = User
-#         fields = ('username', 'location', 'password1', 'password2', )
-
-class PostForm(forms.ModelForm): 
-    amount = forms.IntegerField(label="Amount")
-    notes = forms.CharField(label="Notes", max_length=64)
+class EggPostForm(forms.ModelForm): 
 
     class Meta: 
-        model = EggsAvailable
-        fields = ('amount', 'notes', )
+        model = EggPost
+        exclude=['user',]
+
+class RegisterForm(UserCreationForm): 
+    email = forms.EmailField(required=True)
+    location = forms.CharField(max_length=64)
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
+
+    def save(self, commit=True):
+        user = super(RegisterForm, self).save(commit=False)
+        user.email = self.cleaned_data['email']
+        
+        if commit: 
+            user.save() 
+        
+        user.profile.location = self.cleaned_data['location']
+
+        return user
